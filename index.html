@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NSAPH Air Quality Disparities Mapper</title>
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://ethanmcfarlin.github.io/air-quality-disparities-mapper/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://ethanmcfarlin.github.io/air-quality-disparities-mapper/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://ethanmcfarlin.github.io/air-quality-disparities-mapper/favicon-16x16.png">
+    <link rel="mask-icon" href="https://ethanmcfarlin.github.io/air-quality-disparities-mapper/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Fonts From Google -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto:100,400,300,400italic,700' rel='stylesheet'
+          type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Montserrat:thin,extra-light,light,100,200,300,400,500,600,700,800'
+          rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;
+    1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet" type='text/css'>
+
+    <!-- Bootstrap Styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- ArcGIS Javascript API Styles -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/light/main.css" />
+
+    <!-- Local Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/landing_page.css">
+
+    <!-- FontAwesome Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+
+    <!-- ArcGIS Javascript API Script -->
+    <script src="https://js.arcgis.com/4.24/"></script>
+
+    <!-- FontAwesome Script -->
+    <script src="https://kit.fontawesome.com/b75fb57d6c.js" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+
+    <div id="top-nav">
+        <div class="nav-element" id="logo-holder">
+            <img src="img/logo.jpg">
+        </div>
+
+        <div class="nav-element">
+            <h1 class="title"><span>NSAPH</span> Air Quality Disparities Mapper</h1>
+        </div>
+
+        <ul id="subnav" class="nav-element">
+            <li><p><a href="https://docs.google.com/document/d/1p_EA-VyzVWx9fLsOlgo5c6FkFCw75ELpunqF_WYglxg/edit?usp=sharing" target="_blank">Progress Checklist</a></p></li>
+            <li><p><a href="https://forms.gle/QELD71MJmbvEtfmC8" target="_blank">Feedback Form</a></p></li>
+            <li><p><a href="https://www.hsph.harvard.edu/nsaph/" target="_blank">Lab Website</a></p></li>
+        </ul>
+
+    </div>
+
+    <div id="home-header">
+        <div id="call-to-action">
+            <h1 class="main-header-text">Unpack the state of air <br>pollution in <span class="text-emphasis">your community</span></h1>
+            <div class="visualization-selection-container">
+                <select class="visualization-selection" id="visualization_controller">
+                    <option disabled selected>Select your preferred style of visualization</option>
+                    <option value="surface-map">3D Surface Map</option>
+                    <option value="bivariate-choropleth">Bivariate Choropleth</option>
+                    <option value="bubble-map">Bubble Map</option>
+                </select>
+                <button class="visualization-selection-button" type="button" onclick="pageRedirect()">LAUNCH APP</button>
+            </div>
+
+            <img src="img/phone_and_tablet_small.png" style="margin-top:30px;">
+    </div>
+
+    <div class="container section-divider">
+        <div class="row side-panel">
+            <div class="col features-overview">
+                <div class="color-orb"><i class="fa-solid fa-magnifying-glass-location"></i></div>
+                <h1 class="features-text">Search <span class="less-emphasized">for your community</span></h1>
+
+            </div>
+            <div class="col features-overview">
+                <div class="color-orb"><i class="fa-solid fa-smog"></i></div>
+                <h1 class="features-text">Examine <span class="less-emphasized">air pollution components</span></h1>
+            </div>
+            <div class="col features-overview">
+                <div class="color-orb"><i class="fa-solid fa-code-compare"></i></div>
+                <h1 class="features-text">Compare <span class="less-emphasized">demographic disparities</span></h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="container section-divider">
+        <div class="row">
+            <div class="col sub-panel">
+                <div class="labeled-tag"><p>Research motiviation</p></div>
+                <h1 class="panel-header">Socieconomic status and pollution exposure</h1>
+                <p class="panel-paragraph"><a class="highlight-link" href="https://www.nature.com/articles/s41586-021-04190-y" target="_blank">
+                    Existing research</a> in biostatistics literature suggests that exposure to air pollution varies precipitously not only across the country,
+                    but as predicated on the basis of certain racial/ethnic and income groups.</p>
+            </div>
+            <div class="col sub-panel">
+                <img class="preview-image" src="img/abstract_shape_1.png">
+            </div>
+        </div>
+    </div>
+
+    <div class="container section-divider">
+        <div class="row">
+            <div class="col sub-panel">
+                <img class="preview-image" src="img/abstract_shape_2.png">
+            </div>
+            <div class="col sub-panel">
+                <div class="labeled-tag"><p>Project objective</p></div>
+                <h1 class="panel-header">Improving air quality awareness</h1>
+                <p class="panel-paragraph">The goal of this webapp is to highlight the aforementioned disparities in a public-facing and accessible
+                    medium. We hope this tool will bring an element of personalization to air quality visualization,
+                    informing policy outcomes in the process.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container section-divider" style="margin-bottom:200px;">
+        <div class="row">
+            <div class="col sub-panel">
+                <div class="labeled-tag"><p>Technical overview</p></div>
+                <h1 class="panel-header">Linking together different data sources</h1>
+                <p class="panel-paragraph">Demographic data was sourced from the Decennial Census and combined with predictions of air pollution
+                    components generated by a
+                    <a class="highlight-link" href="https://www.researchsquare.com/article/rs-1745433/v1" target="_blank">
+                        research team</a>
+                    at Harvard. The cumulative dataset spans across different levels of geographic granularity. </p>
+            </div>
+            <div class="col sub-panel">
+                <img class="preview-image" id="third-preview-image" src="img/abstract_shape_3.png">
+            </div>
+        </div>
+    </div>
+
+    <div class="landing-page-footer">
+    </div>
+
+</div>
+
+<!-- Bootstrap Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<!-- Local Scripts -->
+<script src="js/landing_page.js"></script>
+
+<!-- Reference code for this site's scripts was sourced from the ArcGIS for Javascript 4.24 documentation, available
+ here: https://developers.arcgis.com/javascript/latest/
+-->
+
+</body>
+</html>

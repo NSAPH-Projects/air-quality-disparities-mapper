@@ -1,0 +1,201 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+#top-nav {
+    padding-left: 2vw;
+    /*box-shadow: 0 16px 20px -8px rgb(149 157 165 / 20%);*/
+    box-shadow: 0 16px 20px -8px rgb(118 175 235 / 20%);
+    width: 100%;
+    height: 90px;
+    /*border-bottom: 1px solid #e8e7ec;*/
+}
+
+.title {
+    font-family: Montserrat;
+    font-weight: 400;
+    font-size: 14pt;
+    margin-left: 40px;
+}
+
+.title > span {
+    font-weight: 800;
+}
+
+
+.nav-element {
+    display: inline-block;
+    margin: auto;
+}
+
+#viewDiv {
+    height: 86%;
+    width: 100%;
+}
+
+.esri-view .esri-view-surface--inset-outline:focus::after {
+    outline: none !important;
+}‍‍‍
+
+#viewDiv, #menu {
+    display: inline-block;
+ }
+
+#subnav {
+    margin-left: 60px;
+ }
+
+#subnav > li {
+     display: inline-block;
+     list-style: none;
+     height: 80px;
+     line-height: 40px;
+     padding: 0 2vw;
+     text-align: center;
+ }
+
+#subnav > li > p {
+    font-family: Open Sans;
+}
+
+#subnav > li > p:hover {
+    transition: 0.05s all ease;
+    color: #9052F9;
+}
+
+#logo-holder {
+    transform: translateY(19px);
+}
+
+.map-toggle-label {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.map-toggle-label input {
+    opacity: 0;
+    width: 0px;
+    height: 0px;
+}
+
+.map-toggle-span {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #dedede;
+    -webkit-transition: .2s;
+    transition: .2s all ease;
+    border-radius: 3px;
+}
+
+.map-toggle-span:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s cubic-bezier(0,1,0.5,1);
+    border-radius: 3px;
+}
+
+input:checked + .map-toggle-span {
+    background-color: #4A92C4;
+}
+
+input:focus + .map-toggle-span {
+    box-shadow: 0 0 4px #4A92C4;
+}
+
+input:checked + .map-toggle-span:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+.map-toggle-span {
+    border-radius: 34px;
+}
+
+.map-toggle-span:before {
+    border-radius: 50%;
+}
+
+@media only screen and (max-width: 1015px) {
+    #top-nav {
+        height: 140px;
+    }
+}
+
+a, a:hover, a:focus, a:active {
+      text-decoration: none;
+      color: inherit;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
+.left-arrow {
+    border: solid #999999;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+    margin-right: 10px;
+    transform: translateY(-2px);
+}
+
+#variable-selector {
+    width: 320px;
+    background: #fff;
+    padding: 20px;
+    padding-left:30px;
+}
+
+#demographic-holder {
+    margin-bottom: 20px;
+}
+
+.variable-holder {
+    height: 120px;
+    overflow-y: scroll;
+    scrollbar-width: auto;
+    scrollbar-color: #c9c9c9 #ffffff;
+}
+
+.variable-holder > label {
+    padding: 0.5em;
+}
+
+.variable-holder::-webkit-scrollbar {
+    width: 16px;
+    height: 20px;
+}
+
+.variable-holder::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+.variable-holder::-webkit-scrollbar-thumb {
+    background-color: #c9c9c9;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+}
+
+.menu-title {
+    margin-left:-8px;
+}

@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bivariate Choropleth | NSAPH Air Quality Disparities Mapper</title>
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Fonts From Google -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto:100,400,300,400italic,700' rel='stylesheet'
+        type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Montserrat:thin,extra-light,light,100,200,300,400,500,600,700,800'
+        rel='stylesheet' type='text/css'>
+
+  <!-- ArcGIS Javascript API Styles -->
+  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/light/main.css" />
+
+  <!-- Local Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- ArcGIS Javascript API Script -->
+  <script src="https://js.arcgis.com/4.24/"></script>
+
+</head>
+
+<body>
+
+<div id="top-nav">
+  <a href="../index.html"><div class="nav-element" id="logo-holder">
+    <img src="../img/logo.jpg">
+  </div></a>
+
+  <div class="nav-element">
+    <h1 class="title"><span>NSAPH</span> Air Quality Disparities Mapper</h1>
+  </div>
+
+  <ul id="subnav" class="nav-element">
+    <li>
+      <a href="../index.html"><p><i class="left-arrow"></i>Return to Home Page</p></a>
+    </li>
+  </ul>
+
+</div>
+
+<div id="viewDiv"></div>
+
+<div id="variable-selector" class="esri-widget">
+  <b class="menu-title">Select a combination of variables</b>
+  <p>Demographic Variables</p>
+  <div id="demographic-holder" class="variable-holder">
+
+    <input type="radio" id="pct_black" name="demographic" value="pct_black" checked>
+    <label for="pct_black">pct_black</label><br>
+
+    <input type="radio" id="population" name="demographic" value="population">
+    <label for="population">population</label><br>
+
+    <input type="radio" id="pct_female" name="demographic" value="pct_female">
+    <label for="pct_female">pct_female</label><br>
+
+    <input type="radio" id="pct_age_under_5" name="demographic" value="pct_age_under_5">
+    <label for="pct_age_under_5">pct_age_under_5</label><br>
+
+    <input type="radio" id="pct_age_over_85" name="demographic" value="pct_age_over_85">
+    <label for="pct_age_over_85">pct_age_over_85</label><br>
+
+    <input type="radio" id="pct_white" name="demographic" value="pct_white">
+    <label for="pct_white">pct_white</label><br>
+
+    <input type="radio" id="pct_native" name="demographic" value="pct_native">
+    <label for="pct_native">pct_native</label><br>
+
+    <input type="radio" id="pct_asian" name="demographic" value="pct_asian">
+    <label for="pct_asian">pct_asian</label><br>
+
+    <input type="radio" id="pct_two_or_more_races" name="demographic" value="pct_two_or_more_races">
+    <label for="pct_two_or_more_races">pct_two_or_more_races</label><br>
+
+    <input type="radio" id="pct_hispanic" name="demographic" value="pct_hispanic">
+    <label for="pct_hispanic">pct_hispanic</label><br>
+
+    <input type="radio" id="n_households" name="demographic" value="n_households">
+    <label for="n_households">n_households</label><br>
+
+    <input type="radio" id="pct_households_single_father" name="demographic" value="pct_households_single_father">
+    <label for="pct_households_single_father">pct_households_single_father</label><br>
+
+    <input type="radio" id="pct_households_single_mother" name="demographic" value="pct_households_single_mother">
+    <label for="pct_households_single_mother">pct_households_single_mother</label><br>
+
+    <input type="radio" id="n_housing_units" name="demographic" value="n_housing_units">
+    <label for="n_housing_units">n_housing_units</label><br>
+
+    <input type="radio" id="n_occupied_housing_units" name="demographic" value="n_occupied_housing_units">
+    <label for="n_occupied_housing_units">n_occupied_housing_units</label><br>
+
+    <input type="radio" id="pct_renting" name="demographic" value="pct_renting">
+    <label for="pct_renting">pct_renting</label><br>
+
+    <!--         <input type="radio" id="ice_race_ethnicity" name="demographic" value="ice_race_ethnicity">-->
+    <!--         <label for="ice_race_ethnicity">ice_race_ethnicity</label><br>-->
+
+  </div>
+  <p>Air Pollution Variables </p>
+  <div id="pollution-holder" class="variable-holder">
+
+    <input type="radio" id="ec" name="pollution" value="ec" checked>
+    <label for="ec">elemental carbon (EC)</label><br>
+
+    <input type="radio" id="ammonium" name="pollution" value="ammonium">
+    <label for="ammonium">ammonium (NH4+)</label><br>
+
+    <input type="radio" id="nitrate" name="pollution" value="nitrate">
+    <label for="nitrate">nitrate (NO3-)</label><br>
+
+    <input type="radio" id="oc" name="pollution" value="oc">
+    <label for="oc">organic carbon (OC)</label><br>
+
+    <input type="radio" id="sulfate" name="pollution" value="sulfate">
+    <label for="sulfate">sulfate (SO42-)</label><br>
+
+  </div>
+</div>
+
+<!-- Local Scripts -->
+<script src="../js/bivariate_choropleth.js"></script>
+
+<!-- Reference code for this site's scripts was sourced from the ArcGIS for Javascript 4.24 documentation, available
+ here: https://developers.arcgis.com/javascript/latest/
+-->
+
+</body>
+</html>

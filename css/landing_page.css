@@ -1,0 +1,239 @@
+#home-header {
+    width: 100%;
+    height: 1047px;
+    background-repeat: no-repeat;
+    background-attatchment: local;
+    background-position: center;
+    background-image: url("../img/optimized_for_web_dimensions_5.jpg");
+    position: absolute;
+}
+
+.panel-header {
+    font-family: Montserrat;
+    font-weight: 800;
+    max-width: 400px;
+    color: #333333;
+    font-size: 22pt;
+    text-align: left;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.sub-panel {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+.panel-paragraph {
+    font-family: Open Sans;
+    font-weight: 500;
+    color: #696969;
+    text-align: left;
+}
+
+.highlight-link {
+    color: #9052F9;
+    font-weight: 800;
+}
+
+.highlight-link:visited {
+    color: #9052F9;
+}
+
+.labeled-tag {
+    background: #9052F9;
+    width: 200px;
+    border-radius: 30px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 0 85px rgb(90 86 130 / 10%);
+}
+
+.preview-image {
+    width:500px;height:auto;
+}
+
+#third-preview-image {
+    width:550px;
+    transform:translateY(-50px);
+}
+
+.features-overview-container {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.features-overview {
+    background-color:#fff;
+    height:180px;
+    width:290px;
+    margin-left: 30px;
+    margin-right: 30px;
+    box-shadow: 0 0 85px rgb(90 86 130 / 10%);
+    border-radius: 25px;
+}
+
+.labeled-tag > p {
+    font-family: Montserrat;
+    font-weight: 600;
+    font-size: 11pt;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.features-overview > h1 {
+    font-family: Montserrat;
+    color: #383838;
+    font-size: 13.5pt;
+    padding: 30px;
+    margin-top: -15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.features-overview > p {
+    color: #696969;
+    padding: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.purple-color {
+    color: #9052F9;
+    font-weight: 900;
+}
+
+.features-text {
+    font-family: Montserrat;
+    font-weight: 800;
+    text-align: center;
+}
+
+.color-orb {
+    background: #9052F9;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    margin: 0 auto;
+    margin-top: 30px;
+    transform: translateY(-50px);
+    align-content: center;
+    text-align: center;
+    color: #fff;
+}
+
+.less-emphasized {
+    font-weight: 500 !important;
+}
+
+.color-orb > i {
+    padding-top: calc(17px);
+}
+
+
+
+#call-to-action {
+    position: relative;
+    color: #fff;
+    text-align: center;
+    left: 0;
+    right: 0;
+
+}
+
+.main-header-text {
+    margin-top: 60px;
+    font-family: Montserrat;
+    font-weight: 500;
+    font-size: 2em;
+}
+
+.text-emphasis {
+    font-weight: 900;
+}
+
+.visualization-selection-container {
+    display: block;
+}
+
+.visualization-selection {
+    margin: auto;
+    width: 400px;
+    height: 50px;
+    display: inline-block;
+    margin-top: 30px;
+    border-radius: 30px;
+    padding-left: 35px;
+    font-family: Montserrat;
+    font-size: 13.33px;
+    font-weight: 500;
+    box-shadow: 0 16px 20px -8px rgba(118 175 235 0.5);
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    border: none;
+    background-position: right 2rem center;
+    background-size: 1em;
+    margin-right: 15px;
+}
+
+.visualization-selection-button {
+    display: inline-block;
+    background: #fff;
+    border-radius: 30px;
+    font-size: 13.33px;
+    height: 50px;
+    width: 150px;
+    outline: none;
+    padding: 0;
+    border: none;
+    background: black;
+    font-family: Montserrat;
+    color: #fff;
+    font-weight: 800;
+}
+
+.visualization-selection-button:hover {
+    opacity: 0.6;
+    transition: opacity 0.1s ease-in-out;
+}
+
+#logo-holder {
+    transform: translateY(0px) !important;
+}
+
+
+@media only screen and (max-width:1060px) {
+    div.features-overview {
+        margin-bottom:60px;
+    }
+
+    .features-overview-container {
+        height: 500px;
+    }
+}
+
+@media only screen and (max-width:710px) {
+    .features-overview-container {
+        height: 800px;
+    }
+}
+
+#top-nav {
+    padding-top: 20px !important;
+}
+
+.section-divider {
+    margin-top: 100px;
+}
+
+@media only screen and (max-width: 992px) {
+    #third-preview-image {
+        transform: translateY(0px);
+    }
+}
+
+.landing-page-footer {
+    height: 100px;
+    width: 100%;
+    background: #333333;
+}
