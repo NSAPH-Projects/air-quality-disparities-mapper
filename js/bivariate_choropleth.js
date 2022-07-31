@@ -14,6 +14,9 @@ let defaultColorLowerLabel = "0%";
 let defaultColorUpperLabel = "100%";
 let defaultColorPopupText = "represents the percentage (as a decimal) of the population in this county identifying as African American in 2010.";
 
+let currentColorValueStore;
+let currentSizeValueStore;
+
 require([
     "esri/config",
     "esri/Map",
@@ -23,7 +26,8 @@ require([
     "esri/widgets/Expand",
     "esri/smartMapping/symbology/relationship",
     "esri/smartMapping/renderers/relationship",
-], function(esriConfig, Map, MapView, FeatureLayer, Legend, Expand, relationshipSchemes, relationshipRendererCreator) {
+    "esri/smartMapping/statistics/summaryStatistics",
+], function(esriConfig, Map, MapView, FeatureLayer, Legend, Expand, relationshipSchemes, relationshipRendererCreator, summaryStatistics) {
 
     esriConfig.apiKey = "AAPKdfcc4a7dcc7e4176a137c38b87516e64P2haNjbiyKdPRWUk4feYG-Es6ebTY3T8bYJRXrSN-2gUKssSU5kF4T6brCoTDrEq";
 
@@ -39,8 +43,122 @@ require([
         outFields: ["*"],
         popupTemplate: {
             title: "{NAMELSAD10}",
-            content: "{pct_black} represents the percentage of people identifying as African American in 2010 as a decimal" +
-                "<br><br>{ec_pred} is the predicted measure of elemental carbon, also in 2010.",
+            content: [
+                {
+                    type: "text",
+                    text: "{pct_black} represents the percentage (as a decimal) of the " +
+                        "population in this county identifying as African American in 2010.",
+                },
+                {
+                    type: "custom",
+                    creator: () => {
+
+                        if (currentColorValueStore == null || currentSizeValueStore == null) {
+                            const error = document.createElement("div");
+                            error.innerHTML = "Error grabbing attributes from feature. Try zooming in closer to the county and clicking again."
+                            return error;
+                        }
+
+                        const p = document.createElement("ul");
+                        const child = document.createElement("li");
+
+                        p.style.paddingLeft = "20px";
+
+                        p.appendChild(child);
+
+                        let bigger_value;
+                        let smaller_value;
+
+                        let surrounding_text;
+
+                        let field = defaultColorField;
+
+                        let value_1 = currentColorValueStore.toFixed(3);
+
+                        let value_2 = retrieveAverage(field);
+
+                        value_2.then(value2 => {
+
+                            let new_value_2 = value2.toFixed(3);
+
+                            if (value_1 > new_value_2) {
+                                bigger_value = value_1;
+                                smaller_value = new_value_2;
+                                surrounding_text = " greater than the national average of ";
+                            } else {
+                                bigger_value = new_value_2;
+                                smaller_value = value_1;
+                                surrounding_text = " smaller than the national average of ";
+                            }
+
+                            let percent_difference = ( ( (bigger_value - smaller_value ) / smaller_value) * 100);
+
+                            child.innerHTML = "This is " + "<b>" + percent_difference.toFixed(1) + "%" + "</b>" + surrounding_text + new_value_2 + ".";
+
+                        })
+
+                        return p;
+
+                    },
+                },
+                {
+                    type: "text",
+                    text: "{ec_pred} is the predicted measure of elemental carbon, also in 2010.",
+
+                },
+                {
+                    type: "custom",
+                    creator: () => {
+
+                        if (currentColorValueStore == null || currentSizeValueStore == null) {
+                            const error = document.createElement("div");
+                            error.innerHTML = "Error grabbing attributes from feature. Try zooming in closer to the county and clicking again."
+                            return error;
+                        }
+
+                        const p = document.createElement("ul");
+                        const child = document.createElement("li");
+
+                        p.style.paddingLeft = "20px";
+
+                        p.appendChild(child);
+
+                        let bigger_value;
+                        let smaller_value;
+
+                        let surrounding_text;
+
+                        let field = defaultSizeField;
+
+                        let value_1 = currentSizeValueStore;
+
+                        let value_2 = retrieveAverage(field);
+
+                        value_2.then(value2 => {
+
+                            let new_value_2 = value2.toFixed(3);
+
+                            if (value_1 > value2) {
+                                bigger_value = value_1;
+                                smaller_value = new_value_2;
+                                surrounding_text = " greater than the national average of ";
+                            } else {
+                                bigger_value = new_value_2;
+                                smaller_value = value_1;
+                                surrounding_text = " smaller than the national average of ";
+                            }
+
+                            let percent_difference = ( ( (bigger_value - smaller_value ) / smaller_value) * 100);
+
+                            child.innerHTML = "This is " + "<b>" + percent_difference.toFixed(1) + "%" + "</b>" + surrounding_text + new_value_2 + ".";
+
+                        })
+
+                        return p;
+
+                    },
+                }
+            ],
             fieldInfos: [
                 {
                     fieldName: "ec_pred",
@@ -77,6 +195,15 @@ require([
     const legend = new Legend({
         view: view
     });
+
+    function retrieveAverage(variableName) {
+        return summaryStatistics({
+            layer: customLayer,
+            field: variableName
+        }).then(function(statistics) {
+            return statistics.avg;
+        });
+    }
 
     view.ui.add(legend, "bottom-right");
 
@@ -132,12 +259,13 @@ require([
     demographicHolder.addEventListener('change', function (e) {
         let changedField = e.target;
 
+        view.popup.close();
+
         switch (changedField.id) {
             case 'population':
                 setDemographicVariable("population", "population (color)", 0.0, 500000, "0 people", "500,000 people", "represents the population in 2010.")
                 break;
             case 'pct_female':
-                console.log('pct_female 2');
                 setDemographicVariable("pct_female", "% population identifying as female (color)", 0.4, 0.7, "40%", "70%", "represents the percentage (as a decimal) of the population in this county identifying as female in 2010.")
                 break;
             case 'pct_age_under_5':
@@ -188,7 +316,7 @@ require([
 
     function setDemographicVariable
     (field, legend, lower_stop, upper_stop, lower_label, upper_label, popup_text) {
-        console.log("check: setDemographicVariable");
+        // console.log("check: setDemographicVariable");
         defaultColorField = field;
         defaultColorLegend = legend;
         defaultColorLowerStop = lower_stop;
@@ -201,12 +329,125 @@ require([
     }
 
     function refreshDemographicRenderer(field, legend, lower_stop, upper_stop, lower_label, upper_label, popup_text) {
-        console.log("check: refresh rendererer");
+        // console.log("check: refresh rendererer");
 
         customLayer.popupTemplate = {
             title: "{NAMELSAD10}",
-            content: "{" + field + "}" + " " + popup_text +
-                "<br><br>" + "{" + defaultSizeField + "}" + " " + defaultSizePopupText,
+            content: [
+                {
+                    type: "text",
+                    text: "{" + field + "}" + " " + popup_text,
+                },
+                {
+                    type: "custom",
+                    creator: () => {
+
+                        if (currentColorValueStore == null || currentSizeValueStore == null) {
+                            const error = document.createElement("div");
+                            error.innerHTML = "Error grabbing attributes from feature. Try zooming in closer to the county and clicking again."
+                            return error;
+                        }
+
+                        const p2 = document.createElement("ul");
+                        const child2 = document.createElement("li");
+
+                        p2.style.paddingLeft = "20px";
+
+                        p2.appendChild(child2);
+
+                        let bigger_value;
+                        let smaller_value;
+
+                        let surrounding_text;
+
+                        let field2 = field;
+
+                        let value_1 = currentColorValueStore.toFixed(3);
+
+                        let value_2 = retrieveAverage(field2);
+
+                        value_2.then(value2 => {
+
+                            let new_value_2 = value2.toFixed(3);
+
+                            if (value_1 > value2) {
+                                bigger_value = value_1;
+                                smaller_value = new_value_2;
+                                surrounding_text = " greater than the national average of ";
+                            } else {
+                                bigger_value = new_value_2;
+                                smaller_value = value_1;
+                                surrounding_text = " smaller than the national average of ";
+                            }
+
+                            let percent_difference = ( ( (bigger_value - smaller_value ) / smaller_value) * 100);
+
+                            child2.innerHTML = "This is " + "<b>" + percent_difference.toFixed(1) + "%" + "</b>" + surrounding_text + new_value_2 + ".";
+
+                        })
+
+                        return p2;
+
+                    },
+                },
+                {
+                    type: "text",
+                    text: "{" + defaultSizeField + "}" + " " + defaultSizePopupText,
+
+                },
+                {
+                    type: "custom",
+                    creator: () => {
+
+                        if (currentColorValueStore == null || currentSizeValueStore == null) {
+                            const error = document.createElement("div");
+                            error.innerHTML = "Error grabbing attributes from feature. Try zooming in closer to the county and clicking again."
+                            return error;
+                        }
+
+                        const p = document.createElement("ul");
+                        const child = document.createElement("li");
+
+                        p.style.paddingLeft = "20px";
+
+                        p.appendChild(child);
+
+                        let bigger_value;
+                        let smaller_value;
+
+                        let surrounding_text;
+
+                        let field = defaultSizeField;
+
+                        let value_1 = currentSizeValueStore;
+
+                        let value_2 = retrieveAverage(field);
+
+                        value_2.then(value2 => {
+
+                            let new_value_2 = value2.toFixed(3);
+
+                            if (value_1 > new_value_2) {
+                                bigger_value = value_1;
+                                smaller_value = new_value_2;
+                                surrounding_text = " greater than the national average of ";
+                            } else {
+                                bigger_value = new_value_2;
+                                smaller_value = value_1;
+                                surrounding_text = " smaller than the national average of ";
+                            }
+
+                            let percent_difference = ( ( (bigger_value - smaller_value ) / smaller_value) * 100);
+
+                            child.innerHTML = "This is " + "<b>" + percent_difference.toFixed(1) + "%" + "</b>" + surrounding_text + new_value_2 + ".";
+
+                        })
+
+                        return p;
+
+                    },
+                }
+            ],
             fieldInfos: [
                 {
                     fieldName: defaultSizeField,
@@ -256,6 +497,8 @@ require([
     pollutionHolder.addEventListener('change', function (e) {
         let changedField = e.target;
 
+        view.popup.close();
+
         switch (changedField.id) {
             case 'ec':
                 setPollutionVariable("ec_pred", "EC prediction (height)", 0.22, 0.66, "<0.17 (10th percentile)", ">0.51 (95th percentile)", "is the predicted measure of ammonium, also in 2010.")
@@ -278,7 +521,7 @@ require([
 
     function setPollutionVariable
     (field, legend, lower_stop, upper_stop, lower_label, upper_label, popup_text) {
-        console.log("check: setPollutionVariable");
+        // console.log("check: setPollutionVariable");
         defaultSizeField = field;
         defaultSizeLegend = legend;
         defaultSizeLowerStop = lower_stop;
@@ -291,12 +534,125 @@ require([
     }
 
     function refreshPollutionRenderer(field, legend, lower_stop, upper_stop, lower_label, upper_label, popup_text) {
-        console.log("check: refresh pollution rendererer");
+        // console.log("check: refresh pollution rendererer");
 
         customLayer.popupTemplate = {
             title: "{NAMELSAD10}",
-            content: "{" + defaultColorField + "}" + " " + defaultColorPopupText +
-                "<br><br>" + "{" + field + "}" + " " + popup_text,
+            content: [
+                {
+                    type: "text",
+                    text: "{" + defaultColorField + "}" + " " + defaultColorPopupText,
+                },
+                {
+                    type: "custom",
+                    creator: () => {
+
+                        if (currentColorValueStore == null || currentSizeValueStore == null) {
+                            const error = document.createElement("div");
+                            error.innerHTML = "Error grabbing attributes from feature. Try zooming in closer to the county and clicking again."
+                            return error;
+                        }
+
+                        const p = document.createElement("ul");
+                        const child = document.createElement("li");
+
+                        p.style.paddingLeft = "20px";
+
+                        p.appendChild(child);
+
+                        let bigger_value;
+                        let smaller_value;
+
+                        let surrounding_text;
+
+                        let field = defaultColorField;
+
+                        let value_1 = currentColorValueStore.toFixed(3);
+
+                        let value_2 = retrieveAverage(field);
+
+                        value_2.then(value2 => {
+
+                            let new_value_2 = value2.toFixed(3);
+
+                            if (value_1 > value2) {
+                                bigger_value = value_1;
+                                smaller_value = new_value_2;
+                                surrounding_text = " greater than the national average of ";
+                            } else {
+                                bigger_value = new_value_2;
+                                smaller_value = value_1;
+                                surrounding_text = " smaller than the national average of ";
+                            }
+
+                            let percent_difference = ( ( (bigger_value - smaller_value ) / smaller_value) * 100);
+
+                            child.innerHTML = "This is " + "<b>" + percent_difference.toFixed(1) + "%" + "</b>" + surrounding_text + new_value_2 + ".";
+
+                        })
+
+                        return p;
+
+                    },
+                },
+                {
+                    type: "text",
+                    text: "{" + field + "}" + " " + popup_text,
+
+                },
+                {
+                    type: "custom",
+                    creator: () => {
+
+                        if (currentColorValueStore == null || currentSizeValueStore == null) {
+                            const error = document.createElement("div");
+                            error.innerHTML = "Error grabbing attributes from feature. Try zooming in closer to the county and clicking again."
+                            return error;
+                        }
+
+                        const p2 = document.createElement("ul");
+                        const child2 = document.createElement("li");
+
+                        p2.style.paddingLeft = "20px";
+
+                        p2.appendChild(child2);
+
+                        let bigger_value;
+                        let smaller_value;
+
+                        let surrounding_text;
+
+                        let field2 = field;
+
+                        let value_1 = currentSizeValueStore.toFixed(3);
+
+                        let value_2 = retrieveAverage(field2);
+
+                        value_2.then(value2 => {
+
+                            let new_value_2 = value2.toFixed(3);
+
+                            if (value_1 > new_value_2) {
+                                bigger_value = value_1;
+                                smaller_value = new_value_2;
+                                surrounding_text = " greater than the national average of ";
+                            } else {
+                                bigger_value = new_value_2;
+                                smaller_value = value_1;
+                                surrounding_text = " smaller than the national average of ";
+                            }
+
+                            let percent_difference = ( ( (bigger_value - smaller_value ) / smaller_value) * 100);
+
+                            child2.innerHTML = "This is " + "<b>" + percent_difference.toFixed(1) + "%" + "</b>" + surrounding_text + new_value_2 + ".";
+
+                        })
+
+                        return p2;
+
+                    },
+                }
+            ],
             fieldInfos: [
                 {
                     fieldName: field,
@@ -342,6 +698,17 @@ require([
             .then(executeRender);
     }
 
+    view.on('click',(event) =>{
+        view.hitTest(event)
+            .then((response) =>{
+
+                console.log("log this response (size): " + currentSizeValueStore);
+                console.log("log this response (color): " + currentColorValueStore);
+
+                currentSizeValueStore = response.results[0].graphic.attributes[defaultSizeField];
+                currentColorValueStore = response.results[0].graphic.attributes[defaultColorField];
+            });
+    });
 
 
 });
