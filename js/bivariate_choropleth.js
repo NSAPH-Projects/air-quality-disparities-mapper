@@ -88,10 +88,10 @@ require([
                             } else {
                                 bigger_value = new_value_2;
                                 smaller_value = value_1;
-                                surrounding_text = " smaller than the national average of ";
+                                surrounding_text = " less than the national average of ";
                             }
 
-                            let percent_difference = ( ( (bigger_value - smaller_value ) / smaller_value) * 100);
+                            let percent_difference = ( ( Math.abs(new_value_2 - value_1) / new_value_2 ) * 100) ;
 
                             child.innerHTML = "This is " + "<b>" + percent_difference.toFixed(1) + "%" + "</b>" + surrounding_text + new_value_2 + ".";
 
@@ -145,10 +145,10 @@ require([
                             } else {
                                 bigger_value = new_value_2;
                                 smaller_value = value_1;
-                                surrounding_text = " smaller than the national average of ";
+                                surrounding_text = " less than the national average of ";
                             }
 
-                            let percent_difference = ( ( (bigger_value - smaller_value ) / smaller_value) * 100);
+                            let percent_difference = ( ( Math.abs(new_value_2 - value_1) / new_value_2 ) * 100) ;
 
                             child.innerHTML = "This is " + "<b>" + percent_difference.toFixed(1) + "%" + "</b>" + surrounding_text + new_value_2 + ".";
 
@@ -377,10 +377,10 @@ require([
                             } else {
                                 bigger_value = new_value_2;
                                 smaller_value = value_1;
-                                surrounding_text = " smaller than the national average of ";
+                                surrounding_text = " less than the national average of ";
                             }
 
-                            let percent_difference = ( ( (bigger_value - smaller_value ) / smaller_value) * 100);
+                            let percent_difference = ( ( Math.abs(new_value_2 - value_1) / new_value_2 ) * 100) ;
 
                             child2.innerHTML = "This is " + "<b>" + percent_difference.toFixed(1) + "%" + "</b>" + surrounding_text + new_value_2 + ".";
 
@@ -434,10 +434,10 @@ require([
                             } else {
                                 bigger_value = new_value_2;
                                 smaller_value = value_1;
-                                surrounding_text = " smaller than the national average of ";
+                                surrounding_text = " less than the national average of ";
                             }
 
-                            let percent_difference = ( ( (bigger_value - smaller_value ) / smaller_value) * 100);
+                            let percent_difference = ( ( Math.abs(new_value_2 - value_1) / new_value_2 ) * 100) ;
 
                             child.innerHTML = "This is " + "<b>" + percent_difference.toFixed(1) + "%" + "</b>" + surrounding_text + new_value_2 + ".";
 
@@ -582,10 +582,10 @@ require([
                             } else {
                                 bigger_value = new_value_2;
                                 smaller_value = value_1;
-                                surrounding_text = " smaller than the national average of ";
+                                surrounding_text = " less than the national average of ";
                             }
 
-                            let percent_difference = ( ( (bigger_value - smaller_value ) / smaller_value) * 100);
+                            let percent_difference = ( ( Math.abs(new_value_2 - value_1) / new_value_2 ) * 100) ;
 
                             child.innerHTML = "This is " + "<b>" + percent_difference.toFixed(1) + "%" + "</b>" + surrounding_text + new_value_2 + ".";
 
@@ -639,10 +639,10 @@ require([
                             } else {
                                 bigger_value = new_value_2;
                                 smaller_value = value_1;
-                                surrounding_text = " smaller than the national average of ";
+                                surrounding_text = " less than the national average of ";
                             }
 
-                            let percent_difference = ( ( (bigger_value - smaller_value ) / smaller_value) * 100);
+                            let percent_difference = ( ( Math.abs(new_value_2 - value_1) / new_value_2 ) * 100) ;
 
                             child2.innerHTML = "This is " + "<b>" + percent_difference.toFixed(1) + "%" + "</b>" + surrounding_text + new_value_2 + ".";
 
