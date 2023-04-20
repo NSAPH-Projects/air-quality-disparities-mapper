@@ -160,7 +160,7 @@ a:hover {
 }
 
 #variable-selector {
-    width: 320px;
+    width: 335px;
     background: #fff;
     padding: 20px;
     padding-left:30px;
@@ -171,7 +171,7 @@ a:hover {
 }
 
 .variable-holder {
-    height: 120px;
+    height: 130px;
     overflow-y: scroll;
     scrollbar-width: auto;
     scrollbar-color: #c9c9c9 #ffffff;
@@ -196,6 +196,69 @@ a:hover {
     border: 3px solid #ffffff;
 }
 
-.menu-title {
-    margin-left:-8px;
+#scatterPlot {
+    padding-left: 25px;
+    padding-right: 10px;
+    padding-top: 20px;
+}
+
+.label {
+    font-family: Lato;
+    font-size: 10pt;
+}
+
+.axis line{
+    stroke: #707070;
+}
+
+.axis path{
+    stroke: #707070;
+}
+
+.axis text {
+    fill: #707070;
+}
+
+.tooltip {
+    position: absolute;
+    text-align: left;
+    background: white;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    font: 9pt Montserrat;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border-radius: 5px;
+    opacity: 0;
+    /*border-top: 8px solid #E8F0FC;*/
+}
+
+#information-menu {
+    width: 350px;
+    background: #fff;
+    padding: 20px;
+    padding-left:30px;
+    height: 300px;
+    overflow-y: scroll;
+    padding-top:25px;
+}
+
+.to-home-link:hover {
+    opacity: 0.6;
+    transition: opacity 0.1s ease-in-out;
+}
+
+@media only screen and (max-height: 680px) {
+    #scatterPlot {
+        /*overflow-y: scroll;*/
+        /*max-height: 400px;*/
+        transform:translateY(-80px);
+    }
+}
+
+@media only screen and (max-height: 570px) {
+    #scatterPlot {
+        transform:translateY(-100px);
+    }
 }

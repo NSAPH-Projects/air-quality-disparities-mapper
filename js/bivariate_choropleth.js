@@ -1,10 +1,10 @@
-let defaultSizeField = "ec_pred"
-let defaultSizeLegend = "predicted elemental carbon (height)";
-let defaultSizeLowerStop = 0.17;
-let defaultSizeUpperStop = 0.51;
-let defaultSizeLowerLabel = "<0.17 (10th percentile)";
-let defaultSizeUpperLabel = ">0.51 (95th percentile)";
-let defaultSizePopupText = "is the predicted measure of elemental carbon, also in 2010.";
+let defaultSizeField = "pm25";
+let defaultSizeLegend = "predicted particulate matter 2.5 (size)";
+let defaultSizeLowerStop = 5.31;
+let defaultSizeUpperStop = 12.47;
+let defaultSizeLowerLabel = "<5.31 (10th percentile)";
+let defaultSizeUpperLabel = ">12.47 (95th percentile)";
+let defaultSizePopupText = "is the predicted measure of particulate matter 2.5, also in 2010.";
 
 let defaultColorField = "pct_black";
 let defaultColorLegend = "% population identifying as black (color) ";
@@ -13,6 +13,11 @@ let defaultColorUpperStop = 1.0;
 let defaultColorLowerLabel = "0%";
 let defaultColorUpperLabel = "100%";
 let defaultColorPopupText = "represents the percentage (as a decimal) of the population in this county identifying as African American in 2010.";
+
+let current_GEOID = "";
+
+let saved_view;
+let saved_layer;
 
 let currentColorValueStore;
 let currentSizeValueStore;
@@ -27,7 +32,8 @@ require([
     "esri/smartMapping/symbology/relationship",
     "esri/smartMapping/renderers/relationship",
     "esri/smartMapping/statistics/summaryStatistics",
-], function(esriConfig, Map, MapView, FeatureLayer, Legend, Expand, relationshipSchemes, relationshipRendererCreator, summaryStatistics) {
+    "esri/widgets/Search",
+], function(esriConfig, Map, MapView, FeatureLayer, Legend, Expand, relationshipSchemes, relationshipRendererCreator, summaryStatistics, Search) {
 
     esriConfig.apiKey = "AAPKdfcc4a7dcc7e4176a137c38b87516e64P2haNjbiyKdPRWUk4feYG-Es6ebTY3T8bYJRXrSN-2gUKssSU5kF4T6brCoTDrEq";
 
@@ -38,7 +44,9 @@ require([
         // "https://services1.arcgis.com/qN3V93cYGMKQCOxL/arcgis/rest/services/test33/FeatureServer",
         // "https://services1.arcgis.com/qN3V93cYGMKQCOxL/arcgis/rest/services/test38/FeatureServer",
         // "https://services1.arcgis.com/qN3V93cYGMKQCOxL/arcgis/rest/services/us_counties_19/FeatureServer",
-        "https://services1.arcgis.com/qN3V93cYGMKQCOxL/arcgis/rest/services/us_counties_22/FeatureServer",
+        // "https://services1.arcgis.com/qN3V93cYGMKQCOxL/arcgis/rest/services/us_counties_22/FeatureServer",
+        "https://services1.arcgis.com/qN3V93cYGMKQCOxL/arcgis/rest/services/us_counties_22_with_pm25/FeatureServer",
+
         title: "Air pollution exposure by demographics (2010)",
         outFields: ["*"],
         popupTemplate: {
@@ -103,7 +111,7 @@ require([
                 },
                 {
                     type: "text",
-                    text: "{ec_pred} is the predicted measure of elemental carbon, also in 2010.",
+                    text: "{pm25} is the predicted measure of particulate matter 2.5, also in 2010.",
 
                 },
                 {
@@ -161,7 +169,7 @@ require([
             ],
             fieldInfos: [
                 {
-                    fieldName: "ec_pred",
+                    fieldName: "pm25",
                     format: {
                         digitSeparator: false,
                         places: 3
@@ -180,6 +188,8 @@ require([
         },
     });
 
+    saved_layer = customLayer;
+
     const map = new Map({
         basemap: "gray-vector",
         layers: [customLayer]
@@ -192,8 +202,21 @@ require([
         zoom: 3
     });
 
+    saved_view = view;
+
     const legend = new Legend({
         view: view
+    });
+
+    const legendExpand = new Expand({
+        expandIconClass: "esri-icon-key",
+        expanded: true,
+        view: view,
+        group: "bottom-right",
+        content: legend
+    });
+    view.ui.add(legendExpand, {
+        position: "bottom-right"
     });
 
     function retrieveAverage(variableName) {
@@ -204,8 +227,6 @@ require([
             return statistics.avg;
         });
     }
-
-    view.ui.add(legend, "bottom-right");
 
     customLayer.when()
         .then(buildRelationship)
@@ -223,7 +244,7 @@ require([
             view: view,
             relationshipScheme: schemes.secondarySchemes[1],
             field1: {
-                field: "ec_pred"
+                field: "pm25"
             },
             field2: {
                 field: "pct_black"
@@ -248,11 +269,48 @@ require([
         expandIconClass: "esri-icon-sliders-horizontal",
         expanded: true,
         view: view,
+        group: "top-left",
         content: selectionMenu
     });
     view.ui.add(contentInsidePopup, {
         position: "top-left",
         index: 1
+    });
+
+    const infoMenu = document.getElementById("information-menu");
+    const infoContent = new Expand({
+        expandIconClass: "esri-icon-description",
+        expanded: false,
+        view: view,
+        group: "top-left",
+        content: infoMenu
+    });
+    view.ui.add(infoContent, {
+        position: "top-left",
+        index: 3
+    });
+
+    const scatterPlotContainer = document.getElementById("scatterPlot");
+    const scatterPlotPopup = new Expand({
+        expandIconClass: "esri-icon-line-chart",
+        expanded: false,
+        view: view,
+        group: "top-left",
+        content: scatterPlotContainer
+    });
+    view.ui.add(scatterPlotPopup, {
+        position: "top-left",
+        index: 2
+    });
+
+    const searchBar = new Search({
+        view: view,
+        popupEnabled: false
+    });
+
+    view.ui.add(searchBar, {
+        position: "top-right",
+        index: 2
     });
 
     const demographicHolder = document.getElementById("demographic-holder");
@@ -324,6 +382,8 @@ require([
         defaultColorLowerLabel = lower_label;
         defaultColorUpperLabel = upper_label;
         defaultColorPopupText = popup_text;
+
+        refreshGraph();
 
         refreshDemographicRenderer(field, legend, lower_stop, upper_stop, lower_label, upper_label, popup_text);
     }
@@ -500,20 +560,23 @@ require([
         view.popup.close();
 
         switch (changedField.id) {
+            case 'pm25':
+                setPollutionVariable("pm25", "particulate matter 2.5 prediction (height)", 5.31,12.47, "<5.31 (10th percentile)", ">12.47 (95th percentile)", "is the predicted measure of particulate matter 2.5, also in 2010.")
+                break;
             case 'ec':
-                setPollutionVariable("ec_pred", "EC prediction (height)", 0.22, 0.66, "<0.17 (10th percentile)", ">0.51 (95th percentile)", "is the predicted measure of ammonium, also in 2010.")
+                setPollutionVariable("ec_pred", "elemental carbon prediction (height)", 0.22, 0.66, "<0.17 (10th percentile)", ">0.51 (95th percentile)", "is the predicted measure of elemental carbon, also in 2010.")
                 break;
             case 'ammonium':
-                setPollutionVariable("nh4_predic", "NH4+ prediction (height)", 0.31, 1.34, "<0.31 (10th percentile)", ">1.34 (95th percentile)", "is the predicted measure of ammonium, also in 2010.")
+                setPollutionVariable("nh4_predic", "ammonium prediction (height)", 0.31, 1.34, "<0.31 (10th percentile)", ">1.34 (95th percentile)", "is the predicted measure of ammonium, also in 2010.")
                 break;
             case 'nitrate':
-                setPollutionVariable("no3_predic", "NO3- prediction (height)", 0.40, 2.08, "<0.40 (10th percentile)", ">2.08 (95th percentile)", "is the predicted measure of nitrate, also in 2010.")
+                setPollutionVariable("no3_predic", "nitrate prediction (height)", 0.40, 2.08, "<0.40 (10th percentile)", ">2.08 (95th percentile)", "is the predicted measure of nitrate, also in 2010.")
                 break;
             case 'oc':
-                setPollutionVariable("oc_predict", "OC prediction (height)", 0.98, 2.28, "<0.98 (10th percentile)", ">2.28 (95th percentile)", "is the predicted measure of organic carbon, also in 2010.")
+                setPollutionVariable("oc_predict", "organic carbon prediction (height)", 0.98, 2.28, "<0.98 (10th percentile)", ">2.28 (95th percentile)", "is the predicted measure of organic carbon, also in 2010.")
                 break;
             case 'sulfate':
-                setPollutionVariable("so42_predi", "SO42- prediction (height)", 0.68, 3.01, "<0.68 (10th percentile)", ">3.01 (95th percentile)", "is the predicted measure of sulfate, also in 2010.")
+                setPollutionVariable("so42_predi", "sulfate prediction (height)", 0.68, 3.01, "<0.68 (10th percentile)", ">3.01 (95th percentile)", "is the predicted measure of sulfate, also in 2010.")
                 break;
         }
 
@@ -529,6 +592,8 @@ require([
         defaultSizeLowerLabel = lower_label;
         defaultSizeUpperLabel = upper_label;
         defaultSizePopupText = popup_text;
+
+        refreshGraph();
 
         refreshPollutionRenderer(field, legend, lower_stop, upper_stop, lower_label, upper_label, popup_text);
     }
@@ -632,7 +697,7 @@ require([
 
                             let new_value_2 = value2.toFixed(3);
 
-                            if (value_1 > new_value_2) {
+                            if (parseFloat(value_1) > parseFloat(new_value_2)) {
                                 bigger_value = value_1;
                                 smaller_value = new_value_2;
                                 surrounding_text = " greater than the national average of ";
@@ -655,14 +720,14 @@ require([
             ],
             fieldInfos: [
                 {
-                    fieldName: field,
+                    fieldName: defaultColorField,
                     format: {
                         digitSeparator: false,
                         places: 3
                     }
                 },
                 {
-                    fieldName: defaultColorField,
+                    fieldName: field,
                     format: {
                         digitSeparator: false,
                         places: 3
@@ -683,10 +748,10 @@ require([
             view: view,
             relationshipScheme: new_schemes.secondarySchemes[1],
             field1: {
-                field: defaultColorField
+                field: field
             },
             field2: {
-                field: field
+                field: defaultColorField
             },
             numClasses: 3,
             scheme: "secondary2",
@@ -707,8 +772,41 @@ require([
 
                 currentSizeValueStore = response.results[0].graphic.attributes[defaultSizeField];
                 currentColorValueStore = response.results[0].graphic.attributes[defaultColorField];
+
+                current_GEOID = response.results[0].graphic.attributes["GEOID10"];
+
+                refreshGraph();
+
             });
     });
 
 
 });
+
+function teleportToFeature(GEOID) {
+
+    saved_layer.queryFeatures({
+        where: `GEOID10='${GEOID}'`,
+        outFields: ["*"],
+        returnGeometry: true
+    }).then(function (output) {
+        if (!output.features) {
+            return;
+        }
+
+        saved_view.goTo({
+            target: output.features[0].geometry,
+            zoom: 10
+        });
+
+        currentSizeValueStore = output.features[0].attributes[defaultSizeField];
+        currentColorValueStore = output.features[0].attributes[defaultColorField];
+        current_GEOID = output.features[0].attributes["GEOID10"];
+
+        saved_view.popup.open({
+            features: output.features,
+            location: output.geometry
+        });
+
+    })
+}

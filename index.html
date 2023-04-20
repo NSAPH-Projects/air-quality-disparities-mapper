@@ -8,10 +8,10 @@
     <title>NSAPH Air Quality Disparities Mapper</title>
 
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://ethanmcfarlin.github.io/air-quality-disparities-mapper/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://ethanmcfarlin.github.io/air-quality-disparities-mapper/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://ethanmcfarlin.github.io/air-quality-disparities-mapper/favicon-16x16.png">
-    <link rel="mask-icon" href="https://ethanmcfarlin.github.io/air-quality-disparities-mapper/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://disparitiesmapper.github.io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://disparitiesmapper.github.io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://disparitiesmapper.github.io/air-quality-disparities-mapper/favicon-16x16.png">
+    <link rel="mask-icon" href="https://disparitiesmapper.github.io/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
@@ -20,6 +20,7 @@
           type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Montserrat:thin,extra-light,light,100,200,300,400,500,600,700,800'
           rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
 
     <!-- Bootstrap Styles -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -55,9 +56,9 @@
         </div>
 
         <ul id="subnav" class="nav-element">
-            <li><p><a href="https://docs.google.com/document/d/1p_EA-VyzVWx9fLsOlgo5c6FkFCw75ELpunqF_WYglxg/edit?usp=sharing" target="_blank">Progress Checklist</a></p></li>
-            <li><p><a href="https://forms.gle/QELD71MJmbvEtfmC8" target="_blank">Feedback Form</a></p></li>
             <li><p><a href="https://www.hsph.harvard.edu/nsaph/" target="_blank">Lab Website</a></p></li>
+            <li><p><a href="https://docs.google.com/document/d/1EeNQUNL7ZeGE3bZeV2Vvk94h-JFx1ZxTIVwSOFHJVAk/edit?usp=sharing" target="_blank">Changelog</a></p></li>
+            <li><p><a onclick="modalPopup();">Research Team</a></p></li>
         </ul>
 
     </div>
@@ -80,29 +81,29 @@
 
     <div class="container section-divider">
         <div class="row side-panel">
-            <div class="col features-overview">
+            <div class="col features-overview" onclick="openC2APopup('community-popup')">
                 <div class="color-orb"><i class="fa-solid fa-magnifying-glass-location"></i></div>
                 <h1 class="features-text">Search <span class="less-emphasized">for your community</span></h1>
 
             </div>
-            <div class="col features-overview">
+            <div class="col features-overview" onclick="openC2APopup('examine-popup')">
                 <div class="color-orb"><i class="fa-solid fa-smog"></i></div>
                 <h1 class="features-text">Examine <span class="less-emphasized">air pollution components</span></h1>
             </div>
-            <div class="col features-overview">
+            <div class="col features-overview" onclick="openC2APopup('compare-popup')">
                 <div class="color-orb"><i class="fa-solid fa-code-compare"></i></div>
                 <h1 class="features-text">Compare <span class="less-emphasized">demographic disparities</span></h1>
             </div>
         </div>
     </div>
 
-    <div class="container section-divider">
+    <div class="container section-divider" id="first-panel">
         <div class="row">
             <div class="col sub-panel">
                 <div class="labeled-tag"><p>Research motiviation</p></div>
                 <h1 class="panel-header">Socieconomic status and pollution exposure</h1>
                 <p class="panel-paragraph"><a class="highlight-link" href="https://www.nature.com/articles/s41586-021-04190-y" target="_blank">
-                    Existing research</a> in biostatistics literature suggests that exposure to air pollution varies precipitously not only across the country,
+                    Existing research</a> suggests that exposure to air pollution varies precipitously not only across the country,
                     but as predicated on the basis of certain racial/ethnic and income groups.</p>
             </div>
             <div class="col sub-panel">
@@ -126,7 +127,7 @@
         </div>
     </div>
 
-    <div class="container section-divider" style="margin-bottom:200px;">
+    <div class="container section-divider">
         <div class="row">
             <div class="col sub-panel">
                 <div class="labeled-tag"><p>Technical overview</p></div>
@@ -145,8 +146,219 @@
         </div>
     </div>
 
-    <div class="landing-page-footer">
+    <div id="darken"></div>
+
+        <div id="compare-popup" class="central-modal">
+            <div class="border-strip"></div>
+
+            <div class="container">
+                <div class="row inner-c2a-popup">
+                    <div class="col-2">
+                        <div class="close-button-2-container">
+                            <a class="close-button-2" onclick="closeC2APopup('compare-popup')">✕</a>
+
+                        </div>
+                    </div>
+                    <div class="col-10">
+                        <div class="row c2a-popup-intro-row">
+                            <h1 class="c2a-popup-header">Compare demographic disparities</h1>
+                            <div class="secondary-orb"><i class="fa-solid fa-code-compare"></i></div>
+                        </div>
+                        <div class="row">
+                            <p class="c2a-popup-paragraph">Demographic data is sourced from the <a class="highlight-link" href="https://www.researchsquare.com/article/rs-1745433/v1" target="_blank">
+                                US Decennial Census</a> in year 2010. The geographic granularity chosen for analysis in this study is the county-level. Metrics available in the Census center around housing and population, providing insight into research topics such as population changes over time and the percentage of renters in major US cities. This project focuses on a partial subset of all available variables.
+
+                            </p>
+                            <div class="c2a-popup-image-organizer">
+                                <img id="c2a-popup-image-3" src="img/compare_c2a_2.png">
+                            </div>
+                            <p class="c2a-popup-paragraph"> When examined in conjunction with air pollution predictions, demographic data can shine a spotlight on the population subgroups disproportionately exposed to air pollution.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div id="examine-popup" class="central-modal">
+        <div class="border-strip"></div>
+
+        <div class="container">
+            <div class="row inner-c2a-popup">
+                <div class="col-2">
+                    <div class="close-button-2-container">
+                        <a class="close-button-2" onclick="closeC2APopup('examine-popup')">✕</a>
+
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div class="row c2a-popup-intro-row">
+                        <h1 class="c2a-popup-header">Examine air pollution components</h1>
+                        <div class="secondary-orb"><i class="fa-solid fa-smog"></i></div>
+                    </div>
+                    <div class="row">
+                        <p class="c2a-popup-paragraph">The air pollution predictions used in this study are based on <a class="highlight-link" href="https://www.researchsquare.com/article/rs-1745433/v1" target="_blank">
+                            research</a> conducted by the NSAPH group. While PM2.5 is an umbrella measure,
+                            the chemicals comprising PM2.5 can be categorized into several subset components. This project focuses on elemental carbon, ammonium, nitrate, organic
+                            carbon, and sulfate, with each component varying widely in its source.
+                        </p>
+                        <div class="c2a-popup-image-organizer">
+                            <img id="c2a-popup-image-2" src="img/examine_c2a_1.png">
+                        </div>
+                        <p class="c2a-popup-paragraph"> The underlying dataset is available for download through <a class="highlight-link" href="https://www.ciesin.columbia.edu/data/aqdh/pm25component-trace-elements-2000-2019/" target="_blank">
+                            NASA SEDAC</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div id="community-popup" class="central-modal">
+        <div class="border-strip"></div>
+
+        <div class="container">
+            <div class="row inner-c2a-popup">
+                <div class="col-2">
+                    <div class="close-button-2-container">
+                        <a class="close-button-2" onclick="closeC2APopup('community-popup')">✕</a>
+
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div class="row c2a-popup-intro-row">
+                        <h1 class="c2a-popup-header">Search for your community</h1>
+                        <div class="secondary-orb"><i class="fa-solid fa-magnifying-glass-location"></i></div>
+                    </div>
+                    <div class="row">
+                        <p class="c2a-popup-paragraph">Upon launching the mapper screen, there are a few primary ways to locate a given county: panning around on the underlying basemap using geographic labels as context clues, clicking a data point in the scatterplot menu, and entering a place name into the search bar. </p>
+                        <div class="c2a-popup-image-organizer">
+                            <img id="c2a-popup-image" src="img/community_c2a_3.png">
+                        </div>
+                        <p class="c2a-popup-paragraph">These tools are meant to encourage analysis at a scale that is very localized to the user. Clicking on a given county's geometry will reveal information about its relative standing for the selected demographic and pollution measures.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebar-popup">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <a class="close-button" onclick="closeModal()">✕</a>
+                </div>
+            </div>
+            <div class="row portrait-row">
+                <div class="col portrait-col">
+                    <img src="img/portrait_1.png" style="width: 225px; height: auto;">
+                    <h4 class="portrait-title">Ethan McFarlin</h4>
+                    <h5 class="portrait-subtitle">Web App Creator</h5>
+                    <p class="portrait-paragraph">Ethan McFarlin is an undergraduate at Harvard College studying Computer Science.</p>
+                    <div class="portrait-icon">
+                        <a href="https://www.linkedin.com/in/ethan-mcfarlin/?trk=public_profile_browsemap" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="portrait-icon">
+                        <a href="https://ethanmcfarlin.github.io/" target="_blank"><i class="fas fa-link"></i></a>
+                    </div>
+                </div>
+                <div class="col portrait-col">
+                    <img src="img/portrait_2.png" style="width: 225px; height: auto;">
+                    <h4 class="portrait-title">Edgar Castro</h4>
+                    <h5 class="portrait-subtitle">Data Scientist</h5>
+                    <p class="portrait-paragraph">Edgar Castro is a PhD student at the Harvard T.H. Chan School of Public Health.</p>
+                    <div class="portrait-icon">
+                        <a href="https://twitter.com/netwt187g" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+                    </div>
+                    <div class="portrait-icon">
+                        <a href="https://www.hsph.harvard.edu/nsaph/people/edgar-castro/" target="_blank"><i class="fas fa-link"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row portrait-row">
+                <div class="col portrait-col">
+                    <img src="img/portrait_3.png" style="width: 225px; height: auto;">
+                    <h4 class="portrait-title">Dr. Falco Bargagli Stoffi </h4>
+                    <h5 class="portrait-subtitle">Project Leader</h5>
+                    <p class="portrait-paragraph">Falco J. Bargagli Stoffi is a Postdoc at the Harvard T.H. Chan School of Public Health.</p>
+                    <div class="portrait-icon">
+                        <a href="https://twitter.com/falcobargagli?lang=en" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+                    </div>
+                    <div class="portrait-icon">
+                        <a href="https://www.falcobargaglistoffi.com/" target="_blank"><i class="fas fa-link"></i></a>
+                    </div>
+                </div>
+                <div class="col portrait-col">
+                    <img src="img/portrait_4.png" style="width: 225px; height: auto;">
+                    <h4 class="portrait-title">Dr. Heresh Amini</h4>
+                    <h5 class="portrait-subtitle">Project Adviser</h5>
+                    <p class="portrait-paragraph">Heresh Amini is an Assistant Professor at the University of Copenhagen, Denmark.</p>
+                    <div class="portrait-icon">
+                        <a href="https://www.linkedin.com/in/heresh-amini-570436162/?originalSubdomain=dk" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="portrait-icon">
+                        <a href="https://publichealth.ku.dk/staff/?pure=en/persons/647474" target="_blank"><i class="fas fa-link"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row portrait-row">
+                <div class="col portrait-col">
+                    <img src="img/portrait_5.png" style="width: 225px; height: auto;">
+                    <h4 class="portrait-title">Dr. Francesca Dominici </h4>
+                    <h5 class="portrait-subtitle">Project Adviser</h5>
+                    <p class="portrait-paragraph">Francesca Dominici is a Professor at the Harvard T.H. Chan School of Public Health.</p>
+                    <div class="portrait-icon">
+                        <a href="https://www.linkedin.com/in/francesca-dominici-39684b57/" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="portrait-icon">
+                        <a href="https://www.hsph.harvard.edu/francesca-dominici/" target="_blank"><i class="fas fa-link"></i></a>
+                    </div>
+                </div>
+                <div class="col portrait-col">
+                    <img src="img/portrait_6.png" style="width: 225px; height: auto;">
+                    <h4 class="portrait-title">Dr. Joel Schwartz </h4>
+                    <h5 class="portrait-subtitle">Project Adviser</h5>
+                    <p class="portrait-paragraph">Joel Schwartz is a Professor at the Harvard T.H. Chan School of Public Health.</p>
+                    <div class="portrait-icon">
+                        <a href="https://www.linkedin.com/in/joel-schwartz-72672931/" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="portrait-icon">
+                        <a href="https://www.hsph.harvard.edu/joel-schwartz/" target="_blank"><i class="fas fa-link"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="landing-page-footer">
+        <div class="row footer-row">
+            <div class="col-6 footer-column" id="logo-column">
+                <h3 class="footer-header" id="footer-emphasis">NSAPH <span>Disparities Mapper</span></h3>
+                <p class="footer-paragraph">Open-source web application designed to draw increased attention towards the socioeconomic disparities underlying air pollution exposure in a public-facing and accessible medium.
+            </div>
+            <div class="col-2 footer-column">
+                <h3 class="footer-header">Features</h3>
+                <p class="footer-paragraph"><a class="footer-link" href="https://docs.google.com/document/d/1EeNQUNL7ZeGE3bZeV2Vvk94h-JFx1ZxTIVwSOFHJVAk/edit?usp=sharing" target="_blank">Changelog</a></p>
+                <p class="footer-paragraph"><a class="footer-link" href="https://forms.gle/nqycFSmE5n3fu5Ds8" target="_blank">User Testing</a></p>
+            </div>
+            <div class="col-2 footer-column">
+                <h3 class="footer-header">Data</h3>
+                <p class="footer-paragraph"><a class="footer-link" href="https://www.census.gov/programs-surveys/decennial-census.html" target="_blank" >Decennial Census</a></p>
+                <p class="footer-paragraph"><a class="footer-link" href="https://www.researchsquare.com/article/rs-1745433/v1" target="_blank" >Air Pollution</a></p>
+            </div>
+            <div class="col-2 footer-column">
+                <h3 class="footer-header">Affiliations</h3>
+                <p class="footer-paragraph"><a class="footer-link" onclick="modalPopup();" >Research Team</a></p>
+                <p class="footer-paragraph"><a class="footer-link" href="https://www.hsph.harvard.edu/nsaph/" target="_blank" >Lab Website</a></p>
+            </div>
+        </div>
+        <div class="row aboveline">
+            <div class="col">
+                <p class="footer-bold">© 2022 NSAPH</p>
+            </div>
+        </div>
+    </footer>
 
 </div>
 

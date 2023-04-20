@@ -27,6 +27,9 @@
   <!-- Local Styles -->
   <link rel="stylesheet" href="../css/style.css">
 
+  <!-- D3.js Script -->
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+
   <!-- ArcGIS Javascript API Script -->
   <script src="https://js.arcgis.com/4.24/"></script>
 
@@ -45,7 +48,7 @@
 
   <ul id="subnav" class="nav-element">
     <li>
-      <a href="../index.html"><p><i class="left-arrow"></i>Return to Home Page</p></a>
+      <a class="to-home-link" href="../index.html"><p><i class="left-arrow"></i>Return to Home Page</p></a>
     </li>
   </ul>
 
@@ -53,58 +56,125 @@
 
 <div id="viewDiv"></div>
 
+<div id="scatterPlot" class="esri-widget">
+  <b>Investigate the relationship between variables </b>
+  <p>Each dot represents a given county</p>
+</div>
+
+<div id="information-menu" class="esri-widget">
+  <b>Learn how to use the mapper </b>
+  <p>This visualization depicts counties in the form of colored polygons spread across the country.</p>
+  <p>The geometries of each polygon are influenced by a series of demographic and air
+    pollution variables, which can be selected in the "variable toggle" menu above this popup
+    window.</p>
+  <p>Each demographic variable dictates one color scale, while the air pollution
+    variable controls another, and the combination of them both is displayed in the choropleth.</p>
+
+  <p>A legend in the bottom-right corner of the screen offers
+    clarification about the chosen variables and their corresponding scales.</p>
+
+  <p>The demographic variables come from the 2010 edition of the US Decennial Census of
+    Population and Housing, a government initiative which aims to count the population of the
+    country and survey its underlying demographic characteristics (such as age, race, and housing status).</p>
+
+  <p>Conversely, the air pollution variables come from a research study conducted by Dr.
+    Heresh Amini and his collaborators at Harvard University. Their team developed a model to estimate
+    the concentrations of different chemical compounds in the air, all of which can be considered forms of
+    air pollution.
+
+  <p>While the underlying sources vary from component to component, higher concentrations are generally
+    linked to poor health outcomes. This mapper works with 5 of the components from the research study—
+    elemental carbon (EC), ammonium (NH4+), nitrate (NO3-), organic carbon (OC), and sulfate (SO42-). </p>
+  </p>
+
+  <p>The pollution dataset spans 3,535 urban regions at a 50-m spatial resolution and all other non-urban areas at a 1-km resolution. While the data is available from 2000 to 2019, only 2010 values are currently hooked up to the mapper.</p>
+
+  <p>To find the county you live in— or any other county you're curious about— simply navigate to the search bar
+    in the top-right corner of the page and enter its name. The mapper screen will teleport you to
+    the county's coordinates.</p>
+
+  <p>Upon selecting a county, the resulting pop-up window provides an overview of specific values for the two chosen variables,
+    as well as how they each compare to the national average. The wording of the pop-up provides a
+    guide for how to interpret the data values. If the summary statistics at first do not load,
+    zoom in closer to the county and click on it once again.</p>
+
+  <p>To switch the combination of variables currently being viewed, look for the third icon down
+    from the top-left corner of the page. The variable selection menu consists of a series of
+    radio buttons, which will update the map, legend, and all other pop-ups when clicked. A total of 1 demographic and 1
+    air pollution variable are allowed to be graphed at a given point in time.</p>
+
+  <p>The relationship between each of these variables can be explored visually through the form of a scatterplot
+    window, which pops-up when clicking on the fourth icon down from the top-left corner of the
+    page. Each dot represents a county, with its name visible in the form of a tool-tip appearing upon
+    hover. </p>
+
+  <p>Clicking on a scatterplot dot teleports the map to the county's location. To change the scale, zoom
+    and pan on any white space in the scatterplot. If a county geometry has been
+    selected on the geographic map, the corresponding dot will appear to be colored purple in the scatterplot.
+    This provides an understanding of where a given county situates in relation to all other
+    counties based on those two variable values.</p>
+
+  <p>Development is still ongoing, and please feel free to report any bugs you encounter via the
+    "User Testing" link of the landing page footer. </p>
+
+  <p>Thank you!</p>
+</div>
+
 <div id="variable-selector" class="esri-widget">
   <b class="menu-title">Select a combination of variables</b>
   <p>Demographic Variables</p>
   <div id="demographic-holder" class="variable-holder">
 
     <input type="radio" id="pct_black" name="demographic" value="pct_black" checked>
-    <label for="pct_black">pct_black</label><br>
-
-    <input type="radio" id="population" name="demographic" value="population">
-    <label for="population">population</label><br>
-
-    <input type="radio" id="pct_female" name="demographic" value="pct_female">
-    <label for="pct_female">pct_female</label><br>
-
-    <input type="radio" id="pct_age_under_5" name="demographic" value="pct_age_under_5">
-    <label for="pct_age_under_5">pct_age_under_5</label><br>
-
-    <input type="radio" id="pct_age_over_85" name="demographic" value="pct_age_over_85">
-    <label for="pct_age_over_85">pct_age_over_85</label><br>
+    <label for="pct_black">% Black*</label><br>
 
     <input type="radio" id="pct_white" name="demographic" value="pct_white">
-    <label for="pct_white">pct_white</label><br>
+    <label for="pct_white">% White*</label><br>
 
     <input type="radio" id="pct_native" name="demographic" value="pct_native">
-    <label for="pct_native">pct_native</label><br>
+    <label for="pct_native">% Native*</label><br>
 
     <input type="radio" id="pct_asian" name="demographic" value="pct_asian">
-    <label for="pct_asian">pct_asian</label><br>
-
-    <input type="radio" id="pct_two_or_more_races" name="demographic" value="pct_two_or_more_races">
-    <label for="pct_two_or_more_races">pct_two_or_more_races</label><br>
+    <label for="pct_asian">% Asian*</label><br>
 
     <input type="radio" id="pct_hispanic" name="demographic" value="pct_hispanic">
-    <label for="pct_hispanic">pct_hispanic</label><br>
+    <label for="pct_hispanic">% Hispanic</label><br>
 
-    <input type="radio" id="n_households" name="demographic" value="n_households">
-    <label for="n_households">n_households</label><br>
+    <input type="radio" id="pct_female" name="demographic" value="pct_female">
+    <label for="pct_female">% Female</label><br>
+
+    <input type="radio" id="pct_age_under_5" name="demographic" value="pct_age_under_5">
+    <label for="pct_age_under_5">% Age Under 5</label><br>
+
+    <input type="radio" id="pct_age_over_85" name="demographic" value="pct_age_over_85">
+    <label for="pct_age_over_85">% Age Over 85</label><br>
+
+    <input type="radio" id="pct_two_or_more_races" name="demographic" value="pct_two_or_more_races">
+    <label for="pct_two_or_more_races">% Two or More Races</label><br>
+
+    <input type="radio" id="population" name="demographic" value="population">
+    <label for="population">Population</label><br>
 
     <input type="radio" id="pct_households_single_father" name="demographic" value="pct_households_single_father">
-    <label for="pct_households_single_father">pct_households_single_father</label><br>
+    <label for="pct_households_single_father">% of Single Father Households  </label><br>
 
     <input type="radio" id="pct_households_single_mother" name="demographic" value="pct_households_single_mother">
-    <label for="pct_households_single_mother">pct_households_single_mother</label><br>
+    <label for="pct_households_single_mother">% of Single Mother Households</label><br>
+
+    <input type="radio" id="n_households" name="demographic" value="n_households">
+    <label for="n_households">Number of Households</label><br>
 
     <input type="radio" id="n_housing_units" name="demographic" value="n_housing_units">
-    <label for="n_housing_units">n_housing_units</label><br>
+    <label for="n_housing_units">Number of Housing Units</label><br>
 
     <input type="radio" id="n_occupied_housing_units" name="demographic" value="n_occupied_housing_units">
-    <label for="n_occupied_housing_units">n_occupied_housing_units</label><br>
+    <label for="n_occupied_housing_units">Number of Occupied Housing Units</label><br>
 
     <input type="radio" id="pct_renting" name="demographic" value="pct_renting">
-    <label for="pct_renting">pct_renting</label><br>
+    <label for="pct_renting">% Renting</label><br>
+
+    <p><em>* includes people identifying as both non-hispanic and hispanic within the respective category</em></p>
+
 
     <!--         <input type="radio" id="ice_race_ethnicity" name="demographic" value="ice_race_ethnicity">-->
     <!--         <label for="ice_race_ethnicity">ice_race_ethnicity</label><br>-->
@@ -113,26 +183,32 @@
   <p>Air Pollution Variables </p>
   <div id="pollution-holder" class="variable-holder">
 
-    <input type="radio" id="ec" name="pollution" value="ec" checked>
-    <label for="ec">elemental carbon (EC)</label><br>
+    <input type="radio" id="pm25" name="pollution" value="pm25" checked>
+    <label for="pm25">Particulate Matter 2.5 (PM 2.5)</label><br>
+
+    <input type="radio" id="ec" name="pollution" value="ec">
+    <label for="ec">Elemental Carbon (EC)</label><br>
 
     <input type="radio" id="ammonium" name="pollution" value="ammonium">
-    <label for="ammonium">ammonium (NH4+)</label><br>
+    <label for="ammonium">Ammonium (NH4+)</label><br>
 
     <input type="radio" id="nitrate" name="pollution" value="nitrate">
-    <label for="nitrate">nitrate (NO3-)</label><br>
+    <label for="nitrate">Nitrate (NO3-)</label><br>
 
     <input type="radio" id="oc" name="pollution" value="oc">
-    <label for="oc">organic carbon (OC)</label><br>
+    <label for="oc">Organic Carbon (OC)</label><br>
 
     <input type="radio" id="sulfate" name="pollution" value="sulfate">
-    <label for="sulfate">sulfate (SO42-)</label><br>
+    <label for="sulfate">Sulfate (SO42-)</label><br>
 
   </div>
 </div>
 
 <!-- Local Scripts -->
 <script src="../js/bivariate_choropleth.js"></script>
+
+<!-- D3.js Script -->
+<script src="../js/scatterplot.js"></script>
 
 <!-- Reference code for this site's scripts was sourced from the ArcGIS for Javascript 4.24 documentation, available
  here: https://developers.arcgis.com/javascript/latest/
